@@ -1,14 +1,20 @@
 import numpy as np
 import blockbeamParam as params
+import math as Math
 
 class blockbeamDynamics:
     def __init__(self, sample_rate):
         # Initial state conditions
-        y0 = 2.0
-        ydot0 = 1.0
+        y0 = 0.5
+        ydot0 = 0.01
+        theta0 = 0.0
+        thetadot0 = 0.0
+        self.first = True
         self.state = np.array([
             [y0],  # initial condition for y
-            [ydot0]  # initial condition for ydot
+            [theta0],  # initial condition for ydot
+            [ydot0],  # initial condition for y
+            [thetadot0]  # initial condition for ydot
         ])
         self.Ts = sample_rate  # sample rate of system
         self.limit = 1.0  # input saturation limit
@@ -27,18 +33,33 @@ class blockbeamDynamics:
     def f(self, state, u):
         # For system xdot = f(x,u), return f(x,u)
         y = state.item(0)
-        ydot = state.item(1)
+        theta = state.item(1)
+        ydot = state.item(2)
+        thetadot = state.item(3)
         
         # The equations of motion
-        yddot = -params.b * ydot - 5 * y + 1 * u
+        yddot = y * thetadot ** 2 - params.g * np.sin(theta)
+        print("sup" + str(theta))
+        print("sup" + str(yddot))
+        #thetaddotNumerator = u * params.length * Math.cos(theta) - 2 * params.m1 * y * ydot * thetadot - params.m1 * params.g * y * Math.cos(theta)- params.m2 * params.g * params.length * Math.cos(theta) / 2
+        thetaddotNumerator = -(u * params.length - params.m1 * params.g * y - params.m2 * params.g * params.length / 2.0) * np.cos(theta) - 2 * params.m1 * y * ydot * thetadot
+        thetaddotDenominator = (params.m2 * params.length) / 3.0 + params.m1 * y **2
+        thetaddot = thetaddotNumerator / thetaddotDenominator
+        
+
+        if (self.first):
+            #print([y, ydot, yddot, theta, thetadot, thetaddotNumerator, thetaddotDenominator, thetaddot])
+            print([y, ydot, yddot, theta, thetadot, thetaddot])
+            self.first = False
+
         
         # Build xdot and return
-        xdot = np.array([[ydot], [yddot]])
+        xdot = np.array([[ydot], [thetadot], [yddot], [thetaddot]])
         return xdot
     
     def h(self):
         # Returns the measured output y = h(x)
-        return self.state.item(0)
+        return [self.state.item(0), self.state.item(2)]
     
     def update(self, u):
         # This is the external method that takes the input u(t)
