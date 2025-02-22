@@ -84,7 +84,15 @@ class HummingbirdDynamics:
         phi = self.state[0][0]
         theta = self.state[1][0]
         psi = self.state[2][0]
-        y = np.array([[phi], [theta], [psi]])
+        phidot = self.state[3][0]
+        thetadot = self.state[4][0]
+        psidot = self.state[5][0]
+        y = np.array([[phi],
+                         [theta],
+                         [psi],
+                         [phidot],
+                         [thetadot],
+                         [psidot]])
         return y
 
     def rk4_step(self, u: np.ndarray):

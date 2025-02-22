@@ -4,6 +4,7 @@ import hummingbirdParam as P
 from signalGenerator import SignalGenerator
 from hummingbirdAnimation import HummingbirdAnimation
 from dataPlotter import DataPlotter
+from hummingbirdDynamics import HummingbirdDynamics
 
 # instantiate reference input classes
 phi_ref = SignalGenerator(amplitude=1.5, frequency=0.05)
@@ -13,22 +14,18 @@ psi_ref = SignalGenerator(amplitude=0.5, frequency=.5)
 # instantiate the simulation plots and animation
 dataPlot = DataPlotter()
 animation = HummingbirdAnimation()
+mass = HummingbirdDynamics()
+
 
 t = P.t_start  # time starts at t_start
 while t < P.t_end:  # main simulation loop
     # set variables
-    phi = phi_ref.sin(t)
-    theta = theta_ref.sin(t)
-    psi = psi_ref.sin(t)
-    # update animation
-    state = np.array([[phi], [theta], [psi], [0.0], [0.0], [0.0]])
-    ref = np.array([[0], [0], [0]])
-    force = 1000000
-    torque = 200000 # Ethan Patten (eppatten) Couldn't figure out what these do yet
-    # convert force and torque to pwm values
-    pwm = P.mixing @ np.array([[force], [torque]]) / P.km
+    u = np.array([[0.5], [0.5]])
+
+    state = mass.update(u)
+
     animation.update(t, state)
-    dataPlot.update(t, state, pwm)
+    dataPlot.update(t, state, u)
 
     t += P.t_plot  # advance time by t_plot
     plt.pause(0.05)

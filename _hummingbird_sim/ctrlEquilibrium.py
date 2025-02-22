@@ -6,14 +6,14 @@ class ctrlEquilibrium:
         pass 
 
     def update(self, x):
-        theta = 
-        thetadot = 
+        theta = 0
+        thetadot = 0
         
-        force_equilibrium = 
+        force_equilibrium = (P.m1 * P.ell1 + P.m2 * P.ell2) * P.g / P.ellT
         force = force_equilibrium
         torque = 0.
         # convert force and torque to pwm signals
-        pwm = 
+        pwm = 0
         pwm = saturate(pwm, 0, 1) 
         return pwm
 
