@@ -4,6 +4,7 @@ import massParam as P
 from signalGenerator import signalGenerator
 from massAnimation import massAnimation
 from dataPlotter import dataPlotter
+import time
 
 # instantiate reference input classes
 reference = signalGenerator(amplitude=1, frequency=0.1)
@@ -12,7 +13,7 @@ reference = signalGenerator(amplitude=1, frequency=0.1)
 dataPlot = dataPlotter()
 animation = massAnimation()
 t = P.t_start # time starts at t_start
-
+time.sleep(3)
 while t < P.t_end: # main simulation loop
     # set variables
     z = reference.sin(t)

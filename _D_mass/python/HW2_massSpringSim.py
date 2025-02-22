@@ -4,6 +4,7 @@ from signalGenerator import signalGenerator
 from massAnimation import massAnimation
 from dataPlotter import dataPlotter
 from massDynamics import massDynamics
+import time
 
 # instantiate pendulum, controller, and reference classes
 mass = massDynamics(0.1)
@@ -14,6 +15,7 @@ dataPlot = dataPlotter()
 animation = massAnimation()
 
 t = P.t_start  # time starts at t_start
+time.sleep(3)
 while t < P.t_end:  # main simulation loop
     # Propagate dynamics at rate Ts
     t_next_plot = t + P.t_plot

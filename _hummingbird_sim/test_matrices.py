@@ -22,7 +22,7 @@ Author: Benjamin Arnesen
 Version: 1.0
 """
 
-from hummingbird_dynamics_solution import HummingbirdDynamics
+from hummingbirdDynamics import HummingbirdDynamics
 from typing import Type
 import numpy as np
 import pickle
@@ -102,6 +102,10 @@ def compare_matrices(correct_matrix, student_matrix, matrix_name):
         for row, (correct_row, student_row) in enumerate(zip(correct_matrix, student_matrix)):
             for column, (correct_val, student_val) in enumerate(zip(correct_row, student_row)):
                 if correct_val != student_val:
+                    print(correct_matrix)
+                    print(type(correct_matrix))
+                    print(student_matrix)
+                    print(type(student_matrix))
                     matrix_index_error(matrix_name, row, column)
 
     except:
@@ -117,6 +121,10 @@ def compare_matrices_dep(correct_matrix, student_matrix, matrix_name: str):
         for index, (correct_val, student_val) in enumerate(zip(correct_matrix, student_matrix)):
             # if correct_val != student_val:
             if abs(correct_val - student_val) > tolerance:
+                print(correct_matrix)
+                print(type(correct_matrix))
+                print(student_matrix)
+                print(type(student_matrix))
                 matrix_index_error(matrix_name, index, 0)
     except:
         matrix_general_error(matrix_name)

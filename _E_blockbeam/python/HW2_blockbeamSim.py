@@ -6,6 +6,7 @@ from dataPlotter import dataPlotter
 from blockbeamDynamics import blockbeamDynamics
 import blockbeamParam as params
 import math as Math
+import time
 
 # instantiate pendulum, controller, and reference classes
 mass = blockbeamDynamics(0.1)
@@ -20,6 +21,7 @@ firstHere = 20
 t = P.t_start  # time starts at t_start
 y = 0.5
 state = [0, 0]
+time.sleep(3)
 while t < P.t_end:  # main simulation loop
     # Propagate dynamics at rate Ts
     t_next_plot = t + P.t_plot

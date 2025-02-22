@@ -39,10 +39,7 @@ class blockbeamDynamics:
         
         # The equations of motion
         yddot = y * thetadot ** 2 - params.g * np.sin(theta)
-        print("sup" + str(theta))
-        print("sup" + str(yddot))
-        #thetaddotNumerator = u * params.length * Math.cos(theta) - 2 * params.m1 * y * ydot * thetadot - params.m1 * params.g * y * Math.cos(theta)- params.m2 * params.g * params.length * Math.cos(theta) / 2
-        thetaddotNumerator = -(u * params.length - params.m1 * params.g * y - params.m2 * params.g * params.length / 2.0) * np.cos(theta) - 2 * params.m1 * y * ydot * thetadot
+        thetaddotNumerator = -u * params.length * np.cos(theta) + params.m1 * params.g * y * np.cos(theta) + params.m2 * params.g * params.length * np.cos(theta)/ 2.0 - 2 * params.m1 * y * ydot * thetadot
         thetaddotDenominator = (params.m2 * params.length) / 3.0 + params.m1 * y **2
         thetaddot = thetaddotNumerator / thetaddotDenominator
         

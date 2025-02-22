@@ -80,10 +80,10 @@ class HummingbirdDynamics:
 
     def h(self):
         # FIXME Fill in this function
-        # return y = h(x)
-        phi = 
-        theta = 
-        psi = 
+        # return y = h(x) 
+        phi = self.state[0][0]
+        theta = self.state[1][0]
+        psi = self.state[2][0]
         y = np.array([[phi], [theta], [psi]])
         return y
 
@@ -105,34 +105,61 @@ class HummingbirdDynamics:
         psidot = state[5][0]
 
         # Fill out M22, M23, and M33
-        M22 = 
-        M23 = 
-        M33 = 
+        M22 = self.m1 * self.ell1 ** 2 + self.m2 * self.ell2 ** 2 + self.J2y + self.J1y * np.cos(phi) ** 2 + self.J1z * np.sin(phi) ** 2
+        M23 = ( self.J1y - self.J1z ) * np.sin(phi) * np.cos(phi) * np.cos(theta)
+        M33 = (self.m1 * self.ell1 ** 2 + self.m2 * self.ell2 ** 2 + self.J2z + self.J1y * np.sin(phi) ** 2 + self.J1z * np.cos(phi) ** 2) * np.cos(theta) ** 2 + (self.J1x + self.J2x) * np.sin(theta) ** 2 + self.m3 * (self.ell3x ** 2 + self.ell3y ** 2) + self.J3z
 
         # Return the M matrix
-        return np.array([[, , ],
-                      [, , ],
-                      [, , ]
+        return np.array([[self.J1x, 0, -self.J1x * np.sin(theta)],
+                      [ 0, M22, M23],
+                      [-self.J1x * np.sin(theta), M23, M33]
                       ])
 
     def _C(self, state: np.ndarray):
-        # FIXME Fill in this function
-        #extact any necessary variables from the state
+        phi = state[0][0]
+        theta = state[1][0]
+        psi = state[2][0]
+        phidot = state[3][0]
+        thetadot = state[4][0]
+        psidot = state[5][0]
+        
+        s_phi = np.sin(phi)
+        c_phi = np.cos(phi)
+        s_theta = np.sin(theta)
+        c_theta = np.cos(theta)
 
-        # Return the C matrix
-        return np.array([[],
-                [],
-                [],
-                ])
+        N33 = 2 * (self.J1x + self.J2x - self.m1 * self.ell1**2 - self.m2 * self.ell2**2 - self.J2z \
+               - self.J1y * s_phi**2 - self.J1z * c_phi**2) * s_theta * c_theta
+        
+        
+        C1 = (self.J1y - self.J1z) * s_phi * c_phi * thetadot**2 \
+            - (self.J1y - self.J1z) * c_theta * thetadot * psidot \
+            - self.J1x * c_theta * thetadot * psidot
+        
+        C2 = 2 * (self.J1z - self.J1y) * s_phi * c_phi * phidot * thetadot \
+            + (self.J1y - self.J1z) * c_phi**2 * c_theta * phidot * psidot \
+            - (self.J1x + N33) * psidot**2 / 2
+        
+        C3 = (self.J1z - self.J1y) * s_phi * c_phi * s_theta * thetadot**2 \
+            + (self.J1y - self.J1z) * c_phi**2 * c_theta * phidot * thetadot \
+            + 2 * (self.J1y - self.J1z) * s_phi * c_phi * phidot * psidot \
+            + (-self.m1 * self.ell1**2 - self.m2 * self.ell2**2 - self.J2z + self.J1x + self.J2x \
+            + self.J1y * s_phi**2 + self.J1z * c_phi**2) * s_theta * c_theta * thetadot * psidot
+        
+        # Construct the C matrix as a 3x1 array
+        return np.array([[C1],
+                        [C2],
+                        [C3]])
+
         
     def _partialP(self, state: np.ndarray):
         # FIXME Fill in this function
         #extact any necessary variables from the state
 
         # Return the partialP array
-        return np.array([[],
-                        [],
-                        [],
+        return np.array([[0],
+                        [(self.m1 * self.ell1 + self.m2 * self.ell2) * 9.80665 * np.cos(state[1][0])],
+                        [0],
                         ])
     
     def _tau(self, state: np.ndarray, force: float, torque: float):
@@ -155,13 +182,19 @@ class HummingbirdDynamics:
         #extract any necessary variables from the state
 
         # Return the tau matrix
-        return np.array([[],
-                        [],
-                        []])
+        return np.array([[torque],
+                        [self.ellT * force * np.cos(state[0][0])],
+                        [self.ellT * force * np.cos(state[1][0]) * np.sin(state[0][0]) - torque * np.sin(state[1][0])]])
     
     def _B(self):
         # FIXME Fill in this function
         # This needs no variables from the state
+        beta = 0.001
+
+        B = np.array([[beta, 0, 0],
+                        [0, beta, 0],
+                        [0, 0, beta],
+                    ])
         
         # Return the B matrix
         return B
