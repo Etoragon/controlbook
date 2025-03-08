@@ -5,14 +5,17 @@ from massAnimation import massAnimation
 from dataPlotter import dataPlotter
 from massDynamics import massDynamics
 import time
+from crtlPD import ctrlPDClass
 
 # instantiate pendulum, controller, and reference classes
 mass = massDynamics(0.1)
 force = signalGenerator(amplitude=1, frequency=0.1)
+reference = signalGenerator(amplitude=1, frequency=0.05)
 
 # instantiate the simulation plots and animation
 dataPlot = dataPlotter()
 animation = massAnimation()
+controller = ctrlPDClass()
 
 t = P.t_start  # time starts at t_start
 time.sleep(3)
@@ -20,9 +23,12 @@ while t < P.t_end:  # main simulation loop
     # Propagate dynamics at rate Ts
     t_next_plot = t + P.t_plot
     while t < t_next_plot:
+        r = reference.step(t-5)
         u = 0
         if ((force.sin(t) > 0.85)):
             u = 20
+        x = mass.state
+        u = controller.update(r, x)
         y = mass.update(u)  # Propagate the dynamics
         t += P.Ts  # advance time by Ts
     # update animation and data plots at rate t_plot

@@ -36,32 +36,29 @@ class blockbeamDynamics:
         theta = state.item(1)
         ydot = state.item(2)
         thetadot = state.item(3)
+
+        F = u
         
         # The equations of motion
-        yddot = y * thetadot ** 2 - params.g * np.sin(theta)
-        thetaddotNumerator = -u * params.length * np.cos(theta) + params.m1 * params.g * y * np.cos(theta) + params.m2 * params.g * params.length * np.cos(theta)/ 2.0 - 2 * params.m1 * y * ydot * thetadot
-        thetaddotDenominator = (params.m2 * params.length) / 3.0 + params.m1 * y **2
-        thetaddot = thetaddotNumerator / thetaddotDenominator
-        
-
-        if (self.first):
-            #print([y, ydot, yddot, theta, thetadot, thetaddotNumerator, thetaddotDenominator, thetaddot])
-            print([y, ydot, yddot, theta, thetadot, thetaddot])
-            self.first = False
-
-        
+        yddot = (1.0 / params.m1) * y * thetadot ** 2 - params.m1 * params.g * np.sin(theta)
+        thetaddot = (1.0/((params.m2*params.length**2)/3.0 + params.m1*y**2))*(-2.0*params.m1*y*ydot*thetadot- params.m1*params.g*y*np.cos(theta) - params.m2*params.g*params.length/2.0*np.cos(theta) + params.length*F*np.cos(theta))
+    
         # Build xdot and return
         xdot = np.array([[ydot], [thetadot], [yddot], [thetaddot]])
         return xdot
     
     def h(self):
-        # Returns the measured output y = h(x)
-        return [self.state.item(0), self.state.item(2)]
+         # return y = h(x)
+        z = self.state[0][0]
+        theta = self.state.item(1)
+        y = np.array([[z], [theta]])
+        
+        return y
     
     def update(self, u):
         # This is the external method that takes the input u(t)
         # and returns the output y(t)
-        # u = self.saturate(u, self.limit)  # Saturate the input
+        u = self.saturate(u, params.F_max)  # Saturate the input
         self.rk4_step(u)  # Propagate the state by one time step
         return self.h()  # Compute the output at the current state
     
@@ -74,4 +71,6 @@ class blockbeamDynamics:
         self.state += self.Ts / 6 * (F1 + 2 * F2 + 2 * F3 + F4)
     
     def saturate(self, u, limit):
-        return np.clip(u, -limit, limit)
+        if abs(u) > limit:
+            u = limit * np.sign(u)
+        return u

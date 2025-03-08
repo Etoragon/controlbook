@@ -4,39 +4,31 @@ from signalGenerator import signalGenerator
 from blockbeamAnimation import blockbeamAnimation
 from dataPlotter import dataPlotter
 from blockbeamDynamics import blockbeamDynamics
-import blockbeamParam as params
-import math as Math
-import time
 
-# instantiate pendulum, controller, and reference classes
-mass = blockbeamDynamics(0.1)
-force = 0 # signalGenerator(amplitude=1, frequency=0.1)
+# instantiate blockbeam, controller, and reference classes
+blockbeam = blockbeamDynamics()
+force = signalGenerator(amplitude=.5, frequency=1.0, y_offset=11.5)
 
 # instantiate the simulation plots and animation
 dataPlot = dataPlotter()
 animation = blockbeamAnimation()
 
-firstHere = 20
-
 t = P.t_start  # time starts at t_start
-y = 0.5
-state = [0, 0]
-time.sleep(3)
+u = 0.001
+
 while t < P.t_end:  # main simulation loop
-    # Propagate dynamics at rate Ts
+    # Propagate dynamics in between plot samples
     t_next_plot = t + P.t_plot
-    while t < t_next_plot:
-        u = (params.m1 * params.g / params.length) * y + (params.m2 * params.g / (2))
-        if (firstHere > 0):
-            print(u)
-            firstHere = firstHere - 1
-        state = mass.update(u)  # Propagate the dynamics
-        y = state[0]
+
+    while t < t_next_plot:  # updates control and dynamics at faster simulation rate
+        y = blockbeam.update(u)  # Propagate the dynamics
+        u = (P.m1 * P.g / P.length) * y + (P.m2 * P.g / (2))
         t += P.Ts  # advance time by Ts
-    # update animation and data plots at rate t_plot
-    animation.update(mass.state)
-    dataPlot.update(t, mass.state, u)
-    plt.pause(0.001)  # allows time for animation to draw
+
+    # update animation and data plots
+    animation.update(blockbeam.state)
+    dataPlot.update(t, blockbeam.state, u)
+    plt.pause(0.01)  # the pause causes the figure to be displayed during the simulation
 
 # Keeps the program from closing until the user presses a button.
 print('Press key to close')
