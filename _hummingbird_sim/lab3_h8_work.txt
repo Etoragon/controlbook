@@ -1,0 +1,7 @@
+The work for the lab3 H8 is basically the same as the h7, but we do it twice. Once for the roll and again for the yaw. 
+
+However, in this method, we can combnie both of these into a closed nested control loop. 
+
+I was unable to continue with the implementation because the previous H7 took up almost all of my time. For some reason my hummingbird just KEEPS rotating. And I'm assuming laterally that this could MAYBE be fixed through the controller, but now that I think of it, I don't know. The system thinks it's at equilibrium, even when it's rotating, which makes me think that having a controller wouldn't fix anything unless the original issue was fixed. 
+
+I tried to fix this issue for a hour but I just couldn't manage to fix it. I replaced all of the files with the solution files but still, the issue still occurs. I plan to continue trying to fix this issue, then implement the rest of the lab once that is fixed (because I can't see these controllers being of much use if what they are controlling isn't accurately being read)

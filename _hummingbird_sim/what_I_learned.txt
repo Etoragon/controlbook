@@ -1,0 +1,7 @@
+These chapters were pretty cool. I really enjoyed getting to learn about PID control and physically (well, in a simulation) applying what we learned to a device.
+
+Honestly the process of finding the transfer function, then finding and comparing the characteristic equation and going from there is pretty simple, but the method from which it came must have been very tedious to set up. I also now see what was meant when "We make a lot of assumptions" was said. For example in the Homework (HW5) this week, we saw that there were S's in the numerator, and to get rid of this issue (to reduce the S's in the top to only having an order of 1), we analyzed the roots of the numerator polynomial, then wrote a controller to cancel out the one in the left half plane.
+
+While I don't understand how that works on a deep math level, I think it's pretty clever, and I understand the high-level logic behind it through what was taught in class. 
+
+I'm looking forward to solidifying my understanding of this material and finalizing the coding exercises. 
