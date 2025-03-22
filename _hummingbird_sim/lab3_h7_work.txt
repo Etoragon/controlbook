@@ -1,0 +1,28 @@
+The first question asks us to find the transfer fucntion from Theta D to Theta given the closed loop.
+
+This answer is already given a little later in the text and is as follows
+
+          kp * b0 
+    ----------------------
+    s^2 + kd*b0*s + kp*b0
+
+Meaning our characteristic polynomial is
+
+s^2 + kd*b0*s + kp*b0
+
+Finally, with a desired rise time of tr = 0.5 s and a dampening ratio of C = 0.707, we will find kp and kd with respect to the rise time
+
+Our desired characteristic polynomial is 
+
+s^2 + 2*C*wn*s + wn^2 = 0
+
+and so 
+
+kd*b0 = 2*C*wn
+kd*b0 = 2*(0.707)*(2.2/tr)
+kd    = 2*(0.707)*(2.2/tr)*(1/b0)
+
+kp*b0 = wn^2
+kp    = (2.2/tr)^2*(1/b0)
+
+And as such we have found our gains with respect to our desired rise time
