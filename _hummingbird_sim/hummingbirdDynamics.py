@@ -15,6 +15,7 @@ class HummingbirdDynamics:
         ])
 
         # vary the actual physical parameters
+        # ETHAN PATTEN UNCERTAINTY IS HERE
         self.ell1 = P.ell1 * (1.+alpha*(2.*np.random.rand()-1.))
         self.ell2 = P.ell2 * (1.+alpha*(2.*np.random.rand()-1.))
         self.ell3x = P.ell3x * (1.+alpha*(2.*np.random.rand()-1.))

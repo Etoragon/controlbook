@@ -12,8 +12,8 @@ length = 5.0
 width = 1.0
 
 # Initial Conditions
-z0 =  0 # initial position of mass, m
-zdot0 =  0 # initial velocity of mass m/s
+z0 =  0.0 # initial position of mass, m
+zdot0 =  0.0 # initial velocity of mass m/s
 
 # Simulation Parameters
 t_start = 0 # Start time of simulation
@@ -25,5 +25,5 @@ t_plot = 0.1 # the plotting and animation is updated at this rate
 # sigma =  # cutoff freq for dirty derivative
 
 # saturation limits
-F_max = 10  # Max force, N
+F_max = 6  # Max force, N
 

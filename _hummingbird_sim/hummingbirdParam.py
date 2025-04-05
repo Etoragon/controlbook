@@ -30,6 +30,10 @@ J3y   =  0.0001956
 J3z   =  0.000027
 km = g * (m1 * ell1 + m2 * ell2) / ellT  # need to find this experimentally for hardware
 
+b_theta = 1
+b_psi = 1
+
+
 # mixing matrix
 unmixing = np.array([[1.0, 1.0], [d, -d]]) # converts fl and fr (LR) to force and torque (FT)
 mixing = np.linalg.inv(unmixing) # converts force and torque (FT) to fl and fr (LR) 
