@@ -10,7 +10,7 @@ from ctrlStateFeedbackIntegrator import ctrlStateFeedbackIntegrator
 # instantiate pendulum, controller, and reference classes
 hummingbird = HummingbirdDynamics(alpha=0.1)
 controller = ctrlStateFeedbackIntegrator()
-psi_ref = SignalGenerator(amplitude=30.*np.pi/180., frequency=0.02)
+psi_ref = SignalGenerator(amplitude=30.*np.pi/180., frequency=0.04)
 theta_ref = SignalGenerator(amplitude=15.*np.pi/180., frequency=0.05)
 
 # instantiate the simulation plots and animation

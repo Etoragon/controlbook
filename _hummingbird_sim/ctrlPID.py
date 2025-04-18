@@ -2,6 +2,10 @@ import numpy as np
 import hummingbirdParam as P
 
 
+## Theta = Pitch
+## Psi = Yaw
+## Phi = Roll
+
 class ctrlPID:
     def __init__(self):
         # tuning parameters
@@ -23,8 +27,8 @@ class ctrlPID:
         self.kd_roll = P.J1x * 2 * zeta_roll * wn_roll
         self.kp_yaw = wn_yaw**2 / P.b_psi  
         self.kd_yaw = 2 * zeta_yaw * wn_yaw / P.b_psi
-        self.ki_pitch = 1.5  # Integrator gain for pitch
-        self.ki_roll = 1.5   # Integrator gain for roll
+        self.ki_pitch = 1  # Integrator gain for pitch
+        self.ki_roll = 0.01  # Integrator gain for roll
         
         # print gains to terminal
         print('kp_pitch: ', self.kp_pitch)
@@ -42,14 +46,14 @@ class ctrlPID:
         self.beta = (2 * sigma - self.Ts) / (2 * sigma + self.Ts)
 
         # delayed variables
-        self.phi_d1 = 0.
-        self.phi_dot = 0.
-        self.theta_d1 = 0.
-        self.theta_dot = 0.
-        self.psi_d1 = 0.
-        self.psi_dot = 0.
-        self.error_theta_d1 = 0.  # pitch error delayed by 1
-        self.error_psi_d1 = 0.  # yaw error delayed by 1
+        self.phi_d1 = 0.0
+        self.phi_dot = 0.0
+        self.theta_d1 = 0.0
+        self.theta_dot = 0.0
+        self.psi_d1 = 0.0
+        self.psi_dot = 0.0
+        self.error_theta_d1 = 0.0  # pitch error delayed by 1
+        self.error_psi_d1 = 0.0  # yaw error delayed by 1
 
         # Integrators
         self.integrator_theta = 0.0

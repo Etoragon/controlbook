@@ -4,9 +4,9 @@ import numpy as np
 phi0 = 0.0 * np.pi / 180  # roll angle in rads
 theta0 = 0 * np.pi / 180  # pitch angle in rads
 psi0 = 0.0 * np.pi / 180  # yaw angle in rads
-phidot0 = 0.5       # roll rate in rads/sec
+phidot0 = 0.01       # roll rate in rads/sec
 thetadot0 = 0.005       # pitch rate in rads/sec
-psidot0 = 0.75            # yaw rate in rads/sec
+psidot0 = 0.02            # yaw rate in rads/sec
 # Physical parameters of the hummingbird known to the controller
 g     =  9.81
 ell1  =  0.247	
@@ -29,6 +29,7 @@ J3x   =  0.0002222
 J3y   =  0.0001956
 J3z   =  0.000027
 km = g * (m1 * ell1 + m2 * ell2) / ellT  # need to find this experimentally for hardware
+JT = m1 * ell1**2 + m2 * ell2**2 + J2z + m3 * (ell3x**2 + ell3y**2) # Needed for full state feedback
 
 b_theta = 1
 b_psi = 1
@@ -44,6 +45,6 @@ t_end = 100.0  # End time of simulation
 Ts = 0.01  # sample time for simulation
 t_plot = 0.1  # the plotting and animation is updated at this rate
 # saturation limits
-force_max = 100.0               # Max force N
-torque_max = 100.0                # Max torque, Nm
+force_max = 8.0               # Max force N
+torque_max = 8.0                # Max torque, Nm
 

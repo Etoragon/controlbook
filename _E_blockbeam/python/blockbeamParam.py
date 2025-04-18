@@ -31,5 +31,5 @@ F_max = 8 # Max Force, N
 # sigma =   # cutoff freq for dirty derivative
 
 # equilibrium force when block is in center of beam
-# ze =
+ze = 1.0
 # Fe =
