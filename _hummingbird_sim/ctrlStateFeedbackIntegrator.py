@@ -11,6 +11,8 @@ class ctrlStateFeedbackIntegrator:
         zeta_psi = 2
         wn_phi = 2.0
         zeta_phi = 0.711
+        # THIS IS WHERE CONSTANT DISTURBANCE FORCE IS
+        self.constant_disturb_force = 0.05 * P.m1 * P.g
 
         # Longitudinal dynamics (these values are given in page 33 of manual)
         # State space equations are
@@ -62,7 +64,7 @@ class ctrlStateFeedbackIntegrator:
         self.ki_lon = K1_lon[0, 2]
 
         # Lateral dynamics (again, defined on page 34 of manual)
-        a1 = P.ellT * P.m1 * P.g / (P.JT + P.J1z)
+        a1 = P.ellT * (P.m1 * P.g + self.constant_disturb_force) / (P.JT + P.J1z)
         A_lat = np.array([[0, 0, 1, 0],
                           [0, 0, 0, 1],
                           [0, 0, 0, 0],
@@ -136,7 +138,7 @@ class ctrlStateFeedbackIntegrator:
         theta = y[1][0]
         psi = y[2][0]
 
-        force_equilibrium = P.m1 * P.g
+        force_equilibrium = P.m1 * P.g + self.constant_disturb_force
 
         # Dirty derivatives
         self.phi_dot = self.beta * self.phi_dot + (1 - self.beta) * ((phi - self.phi_d1) / self.Ts)
