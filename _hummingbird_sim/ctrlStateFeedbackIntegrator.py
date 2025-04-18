@@ -29,6 +29,19 @@ class ctrlStateFeedbackIntegrator:
         ])
         B1_lon = np.vstack((B_lon, np.zeros((1, 1))))
 
+        # Compute controllability matrix
+        C = cnt.ctrb(A_lon, B_lon)
+
+        # Check rank
+        rank_C = np.linalg.matrix_rank(C)
+
+        # Compare with number of states
+        n = A_lon.shape[0]
+        if rank_C == n:
+            print("The system is controllable!")
+        else:
+            print("The system is NOT controllable!")
+
         # Get the poles (two for long dynamics, one for integrator) 
         p_lon = np.array(np.roots([
             1,
@@ -65,6 +78,19 @@ class ctrlStateFeedbackIntegrator:
             [-C_lat, np.zeros((1, 1))]
         ])
         B1_lat = np.vstack((B_lat, np.zeros((1, 1))))
+
+        # Compute controllability matrix
+        C = cnt.ctrb(A_lat, B_lat)
+
+        # Check rank
+        rank_C = np.linalg.matrix_rank(C)
+
+        # Compare with number of states
+        n = A_lat.shape[0]
+        if rank_C == n:
+            print("The system is controllable!")
+        else:
+            print("The system is NOT controllable!")
 
         p_lat = np.concatenate([
             np.roots([1, 2 * zeta_phi * wn_phi, wn_phi ** 2]),
