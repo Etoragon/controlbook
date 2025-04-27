@@ -5,12 +5,13 @@ from signalGenerator import signalGenerator
 from rodMassAnimation import rodMassAnimation
 from dataPlotter import dataPlotter
 from rodMassDynamics import rodMassDynamics
-from ctrlPD import ctrlPD
+from ctrlLoop import ctrlLoop
 
 # instantiate system, controller, and reference classes
 rodMass = rodMassDynamics()
-controller = ctrlPD()
+controller = ctrlLoop()
 reference = signalGenerator(amplitude=20*np.pi/180.0, frequency=0.1)
+disturbance = signalGenerator(amplitude=0.5)
 
 # instantiate the simulation plots and animation
 dataPlot = dataPlotter()
@@ -30,7 +31,7 @@ while t < P.t_end:
     # update animation and data plots
     animation.update(rodMass.state)
     dataPlot.update(t, r, rodMass.state, u)
-    plt.pause(0.01)
+    plt.pause(0.0001)
 
 # Keeps the program from closing until the user presses a button.
 print('Press key to close')

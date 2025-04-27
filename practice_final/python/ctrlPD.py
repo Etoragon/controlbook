@@ -2,14 +2,11 @@ import numpy as np
 import rodMassParam as P
 
 
-class ctrlPID:
-
+class ctrlPD:
     def __init__(self):
-        self.kp = 3.005
+        self.kp = 3.0005
         self.kd = 0.094425
-        self.ki = 1.3
         self.derivativeCalculator = DirtyDerivative(Ts=P.Ts)
-        self.integrator = 0.0
         self.error_dot = 0.0
         self.error_d1 = 0.0
         self.z_d1 = 0.0
@@ -19,18 +16,15 @@ class ctrlPID:
     def update(self, theta_r, state):
         theta = state
         thetadot = self.derivativeCalculator.compute(theta)
-        print("thetadot: " + str(thetadot))
-        self.integrator = self.integrator + (P.Ts / 2) * ((theta_r - theta) + self.error_d1)
-        print("self.integrator: " + str(self.integrator))
-        tau_tilde = self.kp * (theta_r - theta) - thetadot * self.kd + self.ki * self.integrator
+        print("zdot: " + str(thetadot))
+
+        tau_tilde = self.kp * (theta_r - theta) - thetadot * self.kd
         tau = saturate(tau_tilde, P.tau_max)
 
-        if self.ki != 0.0:
-            self.integrator = self.integrator + P.Ts / self.ki * (tau - tau_tilde)
         self.error_d1 = theta_r - theta
-        self.theta_d1 = theta
+        self.z_d1 = theta
         return tau
-
+    
 class DirtyDerivative:
     def __init__(self, Ts, sigma=0.05):
         self.sigma = sigma

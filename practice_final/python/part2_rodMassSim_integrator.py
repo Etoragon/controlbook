@@ -5,11 +5,11 @@ from signalGenerator import signalGenerator
 from rodMassAnimation import rodMassAnimation
 from dataPlotter import dataPlotter
 from rodMassDynamics import rodMassDynamics
-from ctrlPD import ctrlPD
+from ctrlPID import ctrlPID
 
 # instantiate system, controller, and reference classes
 rodMass = rodMassDynamics()
-controller = ctrlPD()
+controller = ctrlPID()
 reference = signalGenerator(amplitude=20*np.pi/180.0, frequency=0.1)
 
 # instantiate the simulation plots and animation

@@ -4,7 +4,6 @@ from rodMassAnimation import rodMassAnimation
 from dataPlotter import dataPlotter
 from rodMassDynamics import rodMassDynamics
 import numpy as np
-from signalGenerator import signalGenerator
 
 # instantiate arm, controller, and reference classes
 rodMass = rodMassDynamics()
@@ -13,33 +12,22 @@ rodMass = rodMassDynamics()
 dataPlot = dataPlotter()
 animation = rodMassAnimation()
 # control gain calculations go here
-th_eq = signalGenerator(amplitude=np.pi/2)
-tau_eq = 0
-
-def controller(theta):
-    firstTerm = P.ell * P.g * P.m * np.cos(theta)
-    secondTerm = P.k1 * theta 
-    thirdTerm = P.k2 * (theta ** 3 )
-
-    print("-------------------")
-    print(firstTerm)
-    print(secondTerm + thirdTerm)
-    return firstTerm + secondTerm + thirdTerm
+th_eq =
+tau_eq = 
 
 t = P.t_start
 while t < P.t_end:
     t_next_plot = t + P.t_plot
     while t < t_next_plot:
-        u = controller(th_eq.step(t-3))
+        u = 
         y = rodMass.update(u)
-        print("updated: " + str(y))
         t += P.Ts
     # update animation and data plots
     animation.update(rodMass.state)
-    dataPlot.update(t, th_eq.step(t-3), rodMass.state, u)
-    plt.pause(0.01)
+    dataPlot.update(t, 0, rodMass.state, u)
+    plt.pause(0.0001)
 
-# Keeps the program from closing until the user presses a button.d
+# Keeps the program from closing until the user presses a button.
 print('Press key to close')
 plt.waitforbuttonpress()
 plt.close()
